@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>ChessMasterAI</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+<style>
+  #board { width: 400px; margin: 20px auto; }
+  body { text-align: center; font-family: Arial; }
+</style>
+</head>
+<body>
+<h1>ChessMasterAI - Ücretsiz Satranç</h1>
+<div id="board"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+<script>
+var board = null
+var game = new Chess()
+
+function onDragStart(source, piece) {
+    if (game.game_over()) return false
+    if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+        (game.turn() === 'b' && piece.search(/^w/) !== -1)) return false
+}
+
+function onDrop(source, target) {
+    var move = game.move({ from: source, to: target, promotion: 'q' })
+    if (move === null) return 'snapback'
+    console.log(game.fen())
+}
+
+function onSnapEnd() { board.position(game.fen()) }
+
+var config = { draggable: true, position: 'start', onDragStart, onDrop, onSnapEnd }
+board = Chessboard('board', config)
+</script>
+</body>
+</html>
